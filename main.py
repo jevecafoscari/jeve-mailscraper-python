@@ -9,9 +9,11 @@ websites: list = [
 
 # Processing
 results: dict = {}
+counter: int = 0
 for website in websites:
     results[website] = get_emails_from_url(website)
-print(results)
+    counter += len(results[website])
+print(f"Found {counter} emails for {len(websites)} websites")
 
 # Output
 with open("results.csv", "w") as f:
