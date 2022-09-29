@@ -1,12 +1,18 @@
+import csv
 from scraper import get_emails_from_url
 
 # Input
-# TODO: Implement reading websites list from CSV / Excel.
-websites: list = [
-    "https://levius.it",
-    "https://emiliodallatorre.it",
-    "https://jeve.it"
-]
+
+
+# open the file in read mode
+filename = open('website.csv', 'r')
+
+# creating dictreader object
+file = csv.DictReader(filename)
+websites: list = []
+for col in file:
+    websites.append(col['Website'])
+
 
 # Processing
 results: dict = {}
