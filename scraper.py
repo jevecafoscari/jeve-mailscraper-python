@@ -16,8 +16,6 @@ class Scraper(Thread):
         Thread.__init__(self)
 
     def run(self):
-        print(f"Avviato {self.original_url}")
-
         unscraped = deque([self.original_url])  
         scraped = set()  
         emails = set()  
@@ -67,8 +65,6 @@ class Scraper(Thread):
     def join(self, timeout=None):
         Thread.join(self, timeout=timeout)
         if self.found_emails is None:
-            print(f"Timeout {self.original_url}")
             return []
         else:
-            print(f"Completato {self.original_url}")
             return self.found_emails

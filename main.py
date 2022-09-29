@@ -1,5 +1,6 @@
 import csv
 from scraper import Scraper
+from tqdm import tqdm
 
 # Input
 file_plaintext = open('website.csv', 'r')
@@ -14,26 +15,30 @@ websites = websites[0:50]
 # Processing
 results: dict = {}
 counter: int = 0
-
 thread_pool: list = []
 
-for website in websites:
-    threaded_scraper: Scraper = Scraper(website)
+print("Booting up web scrapers...")
+for i in tqdm(range(len(websites))):
+    threaded_scraper: Scraper = Scraper(websites[i])
     threaded_scraper.start()
     thread_pool.append(threaded_scraper)
 
 print("Waiting for threads to finish...")
-for thread in thread_pool:
-    results[thread.original_url] = thread.join(timeout=3)
-    counter += len(results[thread.original_url])
-    print("Scraped URL: ", thread.original_url)
+for i in tqdm(range(len(thread_pool))):
+    results[thread_pool[i].original_url] = thread_pool[i].join(timeout=3)
+    counter += len(results[thread_pool[i].original_url])
 
 print(f"Found {counter} emails for {len(websites)} websites!")
 
 # Output
+print("Saving results...")
 with open("results.csv", "w") as f:
     f.write("Website,Emails\n")
-    for website, emails in results.items():
+
+    websites: list = list(results.keys())
+    for i in tqdm(range(len(websites))):
+        website = websites[i]
+        emails = results[website]
         for email in emails:
             f.write(f"{website},{email}\n")
 
