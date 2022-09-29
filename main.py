@@ -23,7 +23,7 @@ for i in tqdm(range(len(websites))):
 
 print("\nWaiting for threads to finish...")
 for i in tqdm(range(len(thread_pool))):
-    results[thread_pool[i].original_url] = thread_pool[i].join(timeout=3)
+    results[thread_pool[i].original_url] = thread_pool[i].join()
     counter += len(results[thread_pool[i].original_url])
 
 print(f"Found {counter} emails for {len(websites)} websites!")
