@@ -2,15 +2,10 @@ import csv
 from scraper import get_emails_from_url
 
 # Input
-
-
-# open the file in read mode
-filename = open('website.csv', 'r')
-
-# creating dictreader object
-file = csv.DictReader(filename)
+file_plaintext = open('website.csv', 'r')
+file_csv = csv.DictReader(file_plaintext)
 websites: list = []
-for col in file:
+for col in file_csv:
     websites.append(col['Website'])
 
 
