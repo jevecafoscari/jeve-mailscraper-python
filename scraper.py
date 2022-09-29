@@ -9,7 +9,7 @@ from threading import Thread
 
 class Scraper(Thread):
     original_url: str
-    found_emails: set
+    found_emails: set = None
 
     def __init__(self, original_url):
         self.original_url = original_url
@@ -66,5 +66,9 @@ class Scraper(Thread):
 
     def join(self, timeout=None):
         Thread.join(self, timeout=timeout)
-        print(f"Completato {self.original_url}")
-        return self.found_emails
+        if self.found_emails is None:
+            print(f"Timeout {self.original_url}")
+            return []
+        else:
+            print(f"Completato {self.original_url}")
+            return self.found_emails

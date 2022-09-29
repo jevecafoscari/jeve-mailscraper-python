@@ -8,6 +8,8 @@ websites: list = []
 for col in file_csv:
     websites.append(col['Website'])
 
+websites = websites[0:50]
+
 
 # Processing
 results: dict = {}
@@ -22,8 +24,8 @@ for website in websites:
 
 print("Waiting for threads to finish...")
 for thread in thread_pool:
-    results[thread.original_url] = thread.join()
-    counter += len(thread.found_emails)
+    results[thread.original_url] = thread.join(timeout=3)
+    counter += len(results[thread.original_url])
     print("Scraped URL: ", thread.original_url)
 
 print(f"Found {counter} emails for {len(websites)} websites!")
@@ -34,3 +36,5 @@ with open("results.csv", "w") as f:
     for website, emails in results.items():
         for email in emails:
             f.write(f"{website},{email}\n")
+
+print("Done!")
