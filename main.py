@@ -20,9 +20,11 @@ for website in websites:
     threaded_scraper.start()
     thread_pool.append(threaded_scraper)
 
+print("Waiting for threads to finish...")
 for thread in thread_pool:
     results[thread.original_url] = thread.join()
     counter += len(thread.found_emails)
+    print("Scraped URL: ", thread.original_url)
 
 print(f"Found {counter} emails for {len(websites)} websites!")
 

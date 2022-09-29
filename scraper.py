@@ -13,8 +13,11 @@ class Scraper(Thread):
 
     def __init__(self, original_url):
         self.original_url = original_url
+        Thread.__init__(self)
 
     def run(self):
+        print(f"Avviato {self.original_url}")
+
         unscraped = deque([self.original_url])  
         scraped = set()  
         emails = set()  
@@ -30,7 +33,7 @@ class Scraper(Thread):
                 path = url[:url.rfind('/')+1]
             else:
                 path = url
-            print(f"Scraping URL: {url}")
+            # print(f"Scraping URL: {url}")
 
             # Get the HTML
             try:
@@ -63,4 +66,5 @@ class Scraper(Thread):
 
     def join(self, timeout=None):
         Thread.join(self, timeout=timeout)
+        print(f"Completato {self.original_url}")
         return self.found_emails
