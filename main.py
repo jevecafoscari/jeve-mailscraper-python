@@ -1,5 +1,5 @@
 import csv
-from scraper import get_emails_from_url
+from scraper import Scraper
 
 # Input
 file_plaintext = open('website.csv', 'r')
@@ -12,9 +12,18 @@ for col in file_csv:
 # Processing
 results: dict = {}
 counter: int = 0
+
+thread_pool: list = []
+
 for website in websites:
-    results[website] = get_emails_from_url(website)
-    counter += len(results[website])
+    threaded_scraper: Scraper = Scraper(website)
+    threaded_scraper.start()
+    thread_pool.append(threaded_scraper)
+
+for thread in thread_pool:
+    results[thread.original_url] = thread.join()
+    counter += len(thread.found_emails)
+
 print(f"Found {counter} emails for {len(websites)} websites!")
 
 # Output
