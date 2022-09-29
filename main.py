@@ -9,8 +9,6 @@ websites: list = []
 for col in file_csv:
     websites.append(col['Website'])
 
-websites = websites[0:50]
-
 
 # Processing
 results: dict = {}
@@ -23,15 +21,16 @@ for i in tqdm(range(len(websites))):
     threaded_scraper.start()
     thread_pool.append(threaded_scraper)
 
-print("Waiting for threads to finish...")
+print("\nWaiting for threads to finish...")
 for i in tqdm(range(len(thread_pool))):
     results[thread_pool[i].original_url] = thread_pool[i].join(timeout=3)
     counter += len(results[thread_pool[i].original_url])
 
 print(f"Found {counter} emails for {len(websites)} websites!")
 
+
 # Output
-print("Saving results...")
+print("\nSaving results...")
 with open("results.csv", "w") as f:
     f.write("Website,Emails\n")
 
@@ -42,4 +41,4 @@ with open("results.csv", "w") as f:
         for email in emails:
             f.write(f"{website},{email}\n")
 
-print("Done!")
+print("\nDone!")
