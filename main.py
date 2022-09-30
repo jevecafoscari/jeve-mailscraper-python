@@ -8,6 +8,15 @@ file_csv = csv.DictReader(file_plaintext)
 websites: list = []
 for col in file_csv:
     websites.append(col['Website'])
+i = 0
+while i < len(websites):
+    #print(websites[i])
+    if websites[i].find('http://') == -1:
+        #print('... fix ... ')
+        temp = websites[i]
+        websites[i] = 'http://' + temp
+        #print(websites[i])
+    i += 1
 
 
 # Processing
