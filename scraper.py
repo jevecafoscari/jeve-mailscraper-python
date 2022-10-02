@@ -16,19 +16,19 @@ class Scraper(Thread):
         Thread.__init__(self)
 
     def run(self):
-        unscraped = deque([self.original_url])  
-        scraped = set()  
-        emails = set()  
+        unscraped = deque([self.original_url])
+        scraped = set()
+        emails = set()
 
         while len(unscraped):
             # Find the correct usable URL
-            url = unscraped.popleft()  
+            url = unscraped.popleft()
             scraped.add(url)
             parts = urlsplit(url)
 
             base_url = "{0.scheme}://{0.netloc}".format(parts)
             if '/' in parts.path:
-                path = url[:url.rfind('/')+1]
+                path = url[:url.rfind('/') + 1]
             else:
                 path = url
             # print(f"Scraping URL: {url}")
@@ -41,7 +41,7 @@ class Scraper(Thread):
 
             # Extract all email addresses and add them into the resulting set
             new_emails = set(re.findall(r"[a-z0-9\.\-+_]+@[a-z\.\-+_]+\.[a-z]+", response.text, re.I))
-            emails.update(new_emails) 
+            emails.update(new_emails)
 
             soup = BeautifulSoup(response.text, 'lxml')
 
@@ -53,12 +53,12 @@ class Scraper(Thread):
 
                     if link.startswith('/'):
                         link = base_url + link
-                    
+
                     elif not link.startswith('http'):
                         link = path + link
 
                     if not link in unscraped and not link in scraped:
-                            unscraped.append(link)
+                        unscraped.append(link)
 
         self.found_emails = emails
 
